@@ -25,7 +25,7 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
             <Building2 className="size-4.5" />
           </span>
           <span className="hidden sm:inline">Pag-IBIG Acquired Assets Finder</span>
-          <span className="sm:hidden">AA Finder</span>
+          <span className="sm:hidden">Pag-Ibig Finder</span>
         </button>
 
         <nav className="flex items-center gap-1">
