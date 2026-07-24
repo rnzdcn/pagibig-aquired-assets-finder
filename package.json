@@ -7,9 +7,11 @@
     "dev": "vite",
     "server": "node server/index.js",
     "dev:all": "npm run server & npm run dev & wait",
+    "vercel-dev": "npx vercel dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npx vercel deploy --prod"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
