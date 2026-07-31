@@ -10,7 +10,7 @@ export interface UrlState {
 
 const DEFAULT_STATE: UrlState = {
   filters: DEFAULT_FILTERS,
-  search: '',
+  search: 'SAN MARINO',
   auction: 'all',
   view: 'table',
 }
@@ -41,7 +41,7 @@ function decode(): UrlState {
       floorFrom: num('floorFrom'),
       floorTo: num('floorTo'),
     },
-    search: params.get('q') ?? '',
+    search: params.has('q') ? params.get('q')! : 'SAN MARINO',
     auction: (params.get('auction') as UrlState['auction']) ?? 'all',
     view: (params.get('view') as UrlState['view']) ?? 'table',
   }
