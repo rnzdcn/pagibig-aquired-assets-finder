@@ -58,16 +58,9 @@ export function buildColumns({ isFavorite, onToggleFavorite, onViewDetails }: Co
       size: 130,
     },
     {
-      accessorKey: 'propertyType',
-      header: ({ column }) => (
-        <SortableHeader label="Property Type" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')} />
-      ),
-      size: 160,
-    },
-    {
       accessorKey: 'cityMuni',
       header: ({ column }) => (
-        <SortableHeader label="City" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')} />
+          <SortableHeader label="City" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')} />
       ),
       cell: ({ row }) => <span className="capitalize">{row.original.cityMuni.toLowerCase()}</span>,
       size: 150,
@@ -75,8 +68,21 @@ export function buildColumns({ isFavorite, onToggleFavorite, onViewDetails }: Co
     {
       accessorKey: 'location',
       header: 'Address',
-      cell: ({ row }) => <span className="block max-w-[260px] truncate" title={row.original.location}>{row.original.location}</span>,
-      size: 260,
+      cell: ({ row }) => <span className="block max-w-[320px] truncate" title={row.original.location}>{row.original.location}</span>,
+      size: 320,
+    },
+    {
+      accessorKey: 'occupancy',
+      header: 'Occupancy',
+      cell: ({ row }) => <OccupancyBadge occupancy={row.original.occupancy} />,
+      size: 130,
+    },
+    {
+      accessorKey: 'propertyType',
+      header: ({ column }) => (
+          <SortableHeader label="Property Type" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')} />
+      ),
+      size: 160,
     },
     {
       accessorKey: 'minBid',
@@ -110,12 +116,6 @@ export function buildColumns({ isFavorite, onToggleFavorite, onViewDetails }: Co
       ),
       cell: ({ row }) => `${row.original.floorArea.toLocaleString()} sqm`,
       size: 110,
-    },
-    {
-      accessorKey: 'occupancy',
-      header: 'Occupancy',
-      cell: ({ row }) => <OccupancyBadge occupancy={row.original.occupancy} />,
-      size: 130,
     },
     {
       accessorKey: 'auctionLabel',

@@ -49,16 +49,21 @@ Vercel auto-detects the Vite framework preset (build: `vite build`, output: `dis
 
 No environment variables or secrets are required for the core app — the proxy talks to Pag-IBIG's public endpoints directly. The listing watch (below) does need a few.
 
-## Email alerts for new/removed listings
+## Daily alerts for new/removed listings
 
-`api/cron/watch.js` runs on a Vercel Cron schedule (`vercel.json`, once daily — the max frequency on the free Hobby plan), re-runs one saved search server-side, and emails you a diff when listings appear or disappear.
+`api/cron/watch.js` runs once a day on Vercel Cron (`vercel.json`, 8am PHT — once daily is the max frequency on the free Hobby plan), re-runs one saved search server-side, and:
+
+- **Sends a push notification every run**, regardless of whether anything changed — a guaranteed daily ping, delivered via a service worker (`public/sw.js`) so it arrives even with the browser/app fully closed on desktop or Android. iOS Safari needs the site added to the Home Screen first; a plain Safari tab can't receive push at all.
+- **Sends an email only when the search results actually changed** (a listing appeared or disappeared), so the inbox doesn't get a message every single day.
 
 Setup:
 
-1. Create a free [Upstash Redis](https://upstash.com) database (used to remember the last-seen listings between runs) and a free [Resend](https://resend.com) account (used to send the email — 100/day, 3,000/month on the free tier).
+1. Create a free [Upstash Redis](https://upstash.com) database (remembers the last-seen listings and your push subscription between runs) and a free [Resend](https://resend.com) account (sends the change email — 100/day, 3,000/month on the free tier).
 2. Copy `.env.example` to `.env` and fill in the values, or set the same keys directly as Environment Variables in the Vercel project dashboard (Settings → Environment Variables). `WATCH_REGION`/`WATCH_PROVINCE`/`WATCH_CITY_MUNI`/`WATCH_SEARCH` define which saved search gets watched; they default to Dasmariñas, Cavite filtered to "SAN MARINO", matching the app's default filters.
-3. Deploy. The first run after deploy just stores a baseline (no email); every run after that emails `NOTIFY_EMAIL` only when the watched search's results actually changed.
-4. Optional: set `CRON_SECRET` too — Vercel attaches it as a bearer token on cron-triggered requests, so the endpoint rejects anyone else who finds the URL.
+3. Generate a push keypair with `npx web-push generate-vapid-keys` and set `VITE_VAPID_PUBLIC_KEY` (also readable by the client bundle) + `VAPID_PRIVATE_KEY` + `VAPID_SUBJECT` (a `mailto:` address).
+4. Deploy, open the app, and click the **"Daily alert"** button once to grant notification permission and register the push subscription — there's no way to push to a browser that's never subscribed.
+5. The first cron run after that just stores a baseline (no email, but the push still fires); every run after emails `NOTIFY_EMAIL` only when the watched search's results actually changed.
+6. Optional: set `CRON_SECRET` too — Vercel attaches it as a bearer token on cron-triggered requests, so the endpoint rejects anyone else who finds the URL.
 
 To trigger it manually instead of waiting for the daily schedule: run `npm run vercel-dev` (reads `.env` automatically), then in another terminal `npm run watch:test`. Leave `CRON_SECRET` unset in `.env` for local testing, since the manual curl doesn't send that header.
 

@@ -11,12 +11,14 @@ import { PropertyResultsView } from '@/components/property-results-view'
 import { SearchPromptState, ErrorState, TableSkeleton } from '@/components/property-results-states'
 import { PropertyDrawer } from '@/components/property-drawer'
 import { WatchToggle } from '@/components/watch-toggle'
+import { DailyAlertToggle } from '@/components/daily-alert-toggle'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { useProperties } from '@/hooks/use-properties'
 import { useFavorites } from '@/hooks/use-favorites'
 import { useSavedFilters } from '@/hooks/use-saved-filters'
 import { useFiltersUrl } from '@/hooks/use-filters-url'
+import { usePushSubscription } from '@/hooks/use-push-subscription'
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { requestNotificationPermission, useNewListingWatch, WATCH_POLL_MS } from '@/hooks/use-new-listing-watch'
 import { isSearchReady } from '@/types/filters'
@@ -36,6 +38,7 @@ export function PropertiesPage() {
   })
   const { isFavorite, toggleFavorite } = useFavorites()
   const { savedSearches, saveSearch, removeSearch } = useSavedFilters()
+  const pushSubscription = usePushSubscription()
 
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -95,6 +98,14 @@ export function PropertiesPage() {
     setWatchEnabled((prev) => !prev)
   }
 
+  const handleTogglePush = () => {
+    if (pushSubscription.subscribed) {
+      pushSubscription.unsubscribe()
+    } else {
+      pushSubscription.subscribe()
+    }
+  }
+
   const filterSidebar = (
     <PropertyFiltersSidebar
       filters={filters}
@@ -139,6 +150,12 @@ export function PropertiesPage() {
             </div>
             <div className="flex items-center gap-2">
               <WatchToggle enabled={watchEnabled} disabled={!ready} onToggle={handleToggleWatch} />
+              <DailyAlertToggle
+                supported={pushSubscription.supported}
+                subscribed={pushSubscription.subscribed}
+                loading={pushSubscription.loading}
+                onToggle={handleTogglePush}
+              />
               <ViewToggle value={view} onChange={(value) => update({ view: value })} />
             </div>
           </div>

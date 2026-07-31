@@ -5,6 +5,7 @@ import {
   fetchLocationsFromUpstream,
   fetchPropertiesFromUpstream,
 } from '../api/_lib/pagibig.js'
+import { subscribeToPush, unsubscribeFromPush } from '../api/_lib/push-store.js'
 
 const PORT = process.env.PORT ?? 3001
 
@@ -24,6 +25,16 @@ app.get('/api/locations', async (req, res) => {
 
 app.post('/api/images', async (req, res) => {
   const { status, body } = await fetchImagesFromUpstream(req.body)
+  res.status(status).json(body)
+})
+
+app.post('/api/push-subscribe', async (req, res) => {
+  const { status, body } = await subscribeToPush(req.body)
+  res.status(status).json(body)
+})
+
+app.delete('/api/push-subscribe', async (req, res) => {
+  const { status, body } = await unsubscribeFromPush()
   res.status(status).json(body)
 })
 
