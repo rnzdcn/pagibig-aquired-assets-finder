@@ -43,7 +43,7 @@ export function usePushSubscription() {
         (await registration.pushManager.getSubscription()) ??
         (await registration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY!),
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY!) as BufferSource,
         }))
 
       await fetch('/api/push-subscribe', {
