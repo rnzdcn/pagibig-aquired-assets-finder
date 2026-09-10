@@ -26,7 +26,7 @@ export function PropertyCardGrid({ data, isFavorite, onToggleFavorite, onViewDet
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] items-stretch gap-5">
       {data.map((property) => (
         <PropertyCard
           key={property.id}

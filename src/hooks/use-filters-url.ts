@@ -12,7 +12,7 @@ const DEFAULT_STATE: UrlState = {
   filters: DEFAULT_FILTERS,
   search: 'SAN MARINO',
   auction: 'all',
-  view: 'table',
+  view: 'cards',
 }
 
 function decode(): UrlState {
@@ -43,7 +43,7 @@ function decode(): UrlState {
     },
     search: params.has('q') ? params.get('q')! : 'SAN MARINO',
     auction: (params.get('auction') as UrlState['auction']) ?? 'all',
-    view: (params.get('view') as UrlState['view']) ?? 'table',
+    view: (params.get('view') as UrlState['view']) ?? 'cards',
   }
 }
 
@@ -66,7 +66,7 @@ function encode(state: UrlState): string {
   if (filters.floorTo != null) params.set('floorTo', String(filters.floorTo))
   if (state.search) params.set('q', state.search)
   if (state.auction !== 'all') params.set('auction', state.auction)
-  if (state.view !== 'table') params.set('view', state.view)
+  if (state.view !== 'cards') params.set('view', state.view)
   return params.toString()
 }
 
