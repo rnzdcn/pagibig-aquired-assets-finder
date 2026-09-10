@@ -1,7 +1,7 @@
 // import { Heart, Search } from 'lucide-react'
 // import { Button } from '@/components/ui/button'
 // import { Badge } from '@/components/ui/badge'
-// import { ThemeToggle } from '@/components/theme-toggle'
+import { ThemeToggle } from '@/components/theme-toggle'
 // import { useFavorites } from '@/hooks/use-favorites'
 // import { cn } from '@/lib/utils'
 import type { Page } from '@/app-router'
@@ -51,7 +51,7 @@ export function Navbar({ onNavigate }: NavbarProps) {
           {/*    </Badge>*/}
           {/*  )}*/}
           {/*</Button>*/}
-          {/*<ThemeToggle />*/}
+          <ThemeToggle />
         </nav>
       </div>
     </header>
