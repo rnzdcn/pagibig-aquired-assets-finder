@@ -108,7 +108,7 @@ export async function fetchImagesFromUpstream(body) {
 
     const paths = await upstreamRes.json()
     const urls = Array.isArray(paths)
-      ? paths.map((path) => `https://aaonline.pagibigfund.gov.ph/OPABucket${path}`)
+      ? paths.map((path) => `${path}`)
       : []
     return { status: 200, body: urls }
   } catch (err) {
